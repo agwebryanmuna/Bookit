@@ -1,47 +1,48 @@
-'use client'
+"use client";
 
-import React, { useEffect, useState } from 'react'
-import {useRouter} from 'next/navigation';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import logo from "@/assets/images/logo.svg"
-import { FaUser, FaSignInAlt, FaSignOutAlt, FaBuilding } from 'react-icons/fa'
+import logo from "@/assets/images/logo.svg";
+import { FaUser, FaSignInAlt, FaSignOutAlt, FaBuilding } from "react-icons/fa";
 import destroySession from "@/app/actions/destroySession";
 import { toast } from "react-toastify";
-import checkAuth from "@/app/actions/checkAuth";
+import useAuth from "@/context/authContext";
 
 const Header = () => {
   const router = useRouter();
-  
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  
-  useEffect(() => {
-    const getAuthStatus = async () => {
-      const result = await checkAuth();
-      setIsAuthenticated(result.isAuthenticated)
-    }
-    getAuthStatus().then(null);
-  }, [isAuthenticated])
-  
-  
+
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const [loading, setLoading] = useState<boolean>(false);
+
   const handleLogout = async () => {
+    setLoading(true);
     const { success, error } = await destroySession();
-    
-    if(success) {
-      router.push('/login')
+
+    if (success) {
+      setIsAuthenticated(false);
+      router.push("/login");
+      setLoading(false);
     } else {
-      toast.error(error)
+      setLoading(false);
+      toast.error(error);
     }
-  }
-  
-  
+  };
+
   return (
     <header className="bg-gray-100">
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
             <Link href="/">
-              <Image src={logo} alt={'Bookit Logo'} priority={true} width={40} height={40}/>
+              <Image
+                src={logo}
+                alt={"Bookit Logo"}
+                priority={true}
+                width={40}
+                height={40}
+              />
             </Link>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
@@ -51,8 +52,8 @@ const Header = () => {
                 >
                   Rooms
                 </Link>
-                
-                 {/*Logged In Only */}
+
+                {/*Logged In Only */}
                 {isAuthenticated && (
                   <>
                     <Link
@@ -69,46 +70,53 @@ const Header = () => {
                     </Link>
                   </>
                 )}
-                
               </div>
             </div>
           </div>
-           {/*Right Side Menu */}
+          {/*Right Side Menu */}
           <div className="ml-auto">
             <div className="ml-4 flex items-center md:ml-6">
-               {/*Logged Out Only */}
+              {/*Logged Out Only */}
               {!isAuthenticated && (
                 <>
                   <Link
                     href="/login"
                     className="mr-3 text-gray-800 hover:text-gray-600"
                   >
-                    <FaSignInAlt className={'inline mr-1'} /> Login
+                    <FaSignInAlt className={"inline mr-1"} /> Login
                   </Link>
                   <Link
                     href="/register"
                     className="mr-3 text-gray-800 hover:text-gray-600"
                   >
-                    <FaUser className={'inline mr-1'} />Register
+                    <FaUser className={"inline mr-1"} />
+                    Register
                   </Link>
                 </>
               )}
-              
-              <Link href="/my-rooms">
-                <FaBuilding className={'inline mr-1'} /> My Rooms
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="mx-3 text-gray-800 hover:text-gray-600"
-              >
-                <FaSignOutAlt className={'inline mr-1'} /> Sign Out
-              </button>
+
+              {isAuthenticated && (
+                <>
+                  <Link href="/my-rooms">
+                    <FaBuilding className={"inline mr-1"} /> My Rooms
+                  </Link>
+                  <button
+                    disabled={loading}
+                    onClick={handleLogout}
+                    className={`mx-3 text-gray-800 hover:text-gray-600 ${
+                      loading && "opacity-50 cursor-not-allowed"
+                    }`}
+                  >
+                    <FaSignOutAlt className={"inline mr-1"} /> Sign Out
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
       </nav>
-      
-       {/*Mobile menu */}
+
+      {/*Mobile menu */}
       <div className="md:hidden">
         <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
           <Link
@@ -117,22 +125,26 @@ const Header = () => {
           >
             Rooms
           </Link>
-           {/*Logged In Only */}
-          <Link
-            href="/bookings"
-            className="block rounded-md px-3 py-2 text-base font-medium text-gray-800 hover:bg-gray-700 transition-all ease-in-out duration-200 hover:text-white"
-          >
-            Bookings
-          </Link>
-          <Link
-            href="/add-room"
-            className="block rounded-md px-3 py-2 text-base font-medium text-gray-800 hover:bg-gray-700 transition-all ease-in-out duration-200 hover:text-white"
-          >
-            Add Room
-          </Link>
+          {/*Logged In Only */}
+          {isAuthenticated && (
+            <>
+              <Link
+                href="/bookings"
+                className="block rounded-md px-3 py-2 text-base font-medium text-gray-800 hover:bg-gray-700 transition-all ease-in-out duration-200 hover:text-white"
+              >
+                Bookings
+              </Link>
+              <Link
+                href="/add-room"
+                className="block rounded-md px-3 py-2 text-base font-medium text-gray-800 hover:bg-gray-700 transition-all ease-in-out duration-200 hover:text-white"
+              >
+                Add Room
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>
-  )
-}
-export default Header
+  );
+};
+export default Header;

@@ -1,26 +1,37 @@
-'use client'
+"use client";
 
-import React, { useActionState, useEffect } from 'react'
+import React, { useActionState, useEffect } from "react";
 import Link from "next/link";
 import createSession from "@/app/actions/createSession";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import useAuth from "@/context/authContext";
 
+const initialFormState = {
+  error: "",
+  success: false,
+};
 
 const LoginPage = () => {
-  const [state, formAction, isPending] = useActionState(createSession, {})
-  const router = useRouter()
-  
+  const [state, formAction, isPending] = useActionState(
+    createSession,
+    initialFormState
+  );
+  const router = useRouter();
+
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
+
   useEffect(() => {
-    if(state?.error) {
-      toast.error(state?.error)
+    if (state?.error) {
+      toast.error(state?.error);
     }
-    if(state?.success) {
-      toast.success('Login successful!')
-      router.push('/')
+    if (state?.success) {
+      toast.success("Login successful!");
+      setIsAuthenticated(true);
+      router.push("/");
     }
-  }, [state])
-  
+  }, [state]);
+
   return (
     <div className="flex items-center justify-center">
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-sm mt-20">
@@ -28,11 +39,14 @@ const LoginPage = () => {
           <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
             Login
           </h2>
-          
+
           <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 font-bold mb-2"
-            >Email</label
+            <label
+              htmlFor="email"
+              className="block text-gray-700 font-bold mb-2"
             >
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -41,11 +55,14 @@ const LoginPage = () => {
               required
             />
           </div>
-          
+
           <div className="mb-6">
-            <label htmlFor="password" className="block text-gray-700 font-bold mb-2"
-            >Password</label
+            <label
+              htmlFor="password"
+              className="block text-gray-700 font-bold mb-2"
             >
+              Password
+            </label>
             <input
               type="password"
               id="password"
@@ -54,24 +71,28 @@ const LoginPage = () => {
               required
             />
           </div>
-          
+
           <div className="flex flex-col gap-5">
             <button
               type="submit"
-              className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 ${isPending && 'opacity-50 cursor-not-allowed'}`}
+              className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 ${
+                isPending && "opacity-50 cursor-not-allowed"
+              }`}
               disabled={isPending}
             >
               Login
             </button>
-            
+
             <p>
               No account?
-              <Link href="/register" className="text-blue-500">Register</Link>
+              <Link href="/register" className="text-blue-500">
+                Register
+              </Link>
             </p>
           </div>
         </form>
       </div>
     </div>
-  )
-}
-export default LoginPage
+  );
+};
+export default LoginPage;

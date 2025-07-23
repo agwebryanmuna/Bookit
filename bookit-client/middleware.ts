@@ -1,16 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
+import checkAuth from "./app/actions/checkAuth";
 
+export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+  const { isAuthenticated } = await checkAuth();
 
-export function middleware(request: NextRequest) {
-  const isAuthenticated = false;
-  
-  if(!isAuthenticated) {
-    return NextResponse.redirect(new URL('/login', request.url));
+  if (pathname === '/bookings' && !isAuthenticated) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
-  
-  return NextResponse.next()
+
+  if((pathname === '/login' || pathname === '/register') && isAuthenticated) {
+    return NextResponse.redirect(new URL("/bookings", request.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/bookings']
-}
+  matcher: ["/bookings", "/login"],
+};

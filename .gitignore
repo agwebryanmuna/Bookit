@@ -15,7 +15,7 @@ bookit-client/node_modules
 coverage
 
 # next.js
-.next/
+.next
 out/
 .idea
 # production

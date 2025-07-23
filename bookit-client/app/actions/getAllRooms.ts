@@ -1,10 +1,11 @@
 'use server';
 
 import { createAdminClient } from "@/lib/server/appwrite";
+import { Room } from "@/utils/definitions";
 import { redirect } from "next/navigation";
 
 
-export async function getAllRooms() {
+export async function getAllRooms():Promise<Room[]> {
 try {
   
   const { databases } = await createAdminClient();
@@ -35,6 +36,7 @@ try {
   
 }  catch (e) {
   console.log('Failed to get rooms', e)
-  redirect('/error')
+  return []
+  // redirect('/error')
 }
 }

@@ -4,6 +4,7 @@ import "@/assets/styles/globals.css";
 import Header from "@/component/Header";
 import Footer from "@/component/Footer";
 import { ToastContainer } from "react-toastify";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -22,16 +23,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-    <body
-      className={`${inter.variable} antialiased`}
-    >
-      <Header/>
-      <main className={'mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'}>
-        {children}
-      </main>
-      <ToastContainer />
-    <Footer/>
-    </body>
+      <body className={`${inter.variable} antialiased`}>
+        <AuthProvider>
+          <Header />
+          <main className={"mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8"}>
+            {children}
+          </main>
+          <ToastContainer />
+          <Footer />
+        </AuthProvider>
+      </body>
     </html>
   );
 }
