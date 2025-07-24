@@ -1,12 +1,8 @@
 "use server";
 
 import { createAdminClient } from "@/lib/server/appwrite";
+import { SessionResponse } from "@/utils/definitions";
 import { cookies } from "next/headers";
-
-interface SessionResponse {
-  success: boolean;
-  error: string;
-}
 
 async function createSession(state: SessionResponse, formData: FormData) {
   const password = formData.get("password") as string;

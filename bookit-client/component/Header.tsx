@@ -63,7 +63,7 @@ const Header = () => {
                       Bookings
                     </Link>
                     <Link
-                      href="/add-room"
+                      href="/rooms/add"
                       className="rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-700 transition-all ease-in-out duration-200 hover:text-white"
                     >
                       Add Room
@@ -97,7 +97,7 @@ const Header = () => {
 
               {isAuthenticated && (
                 <>
-                  <Link href="/my-rooms">
+                  <Link href="/rooms/my-rooms">
                     <FaBuilding className={"inline mr-1"} /> My Rooms
                   </Link>
                   <button

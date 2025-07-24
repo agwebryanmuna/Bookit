@@ -1,11 +1,7 @@
 'use server';
 import { createAdminClient } from '@/lib/server/appwrite';
+import { SessionResponse } from '@/utils/definitions';
 import { ID } from 'node-appwrite';
-
-interface SessionResponse {
-  success: boolean;
-  error: string;
-}
 
 
 async function createUser(previousState:SessionResponse, formData:FormData) {

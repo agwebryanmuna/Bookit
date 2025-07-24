@@ -13,3 +13,8 @@ export interface Room {
   price_per_hour: number;
   image: string;
 }
+
+export interface SessionResponse {
+  success: boolean;
+  error: string;
+}
