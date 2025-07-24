@@ -2,12 +2,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [{
-      protocol: "https",
-      hostname: "cloud.appwrite.io",
-      port: "",
-      pathname: "/v1/storage/buckets/**/files/**/view",
-    }],
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "res.cloudinary.com",
+        pathname: "/dx4rloqv5/**",
+      },
+    ],
   },
 };
 

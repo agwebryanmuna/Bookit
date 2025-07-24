@@ -1,7 +1,6 @@
-
-export interface Room {
-  $id: string;
-  user_id: string;
+export interface RoomType {
+  _id: string;
+  userId: string;
   name: string;
   description: string;
   sqft: number;
@@ -17,4 +16,10 @@ export interface Room {
 export interface SessionResponse {
   success: boolean;
   error: string;
+}
+
+export interface User {
+  _id: string;
+  email: string;
+  name: string;
 }

@@ -1,30 +1,41 @@
-'use server'
+"use server";
 
-import {createSessionClient} from "@/lib/server/appwrite";
-import {cookies} from "next/headers";
+import User from "@/models/User.model";
+import { jwtVerify } from "jose";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
-async function checkAuth():Promise< {isAuthenticated: boolean; user?: {id: string; name: string; email: string}}> {
-    const cookieStore = await cookies();
-    const sessionCookie = cookieStore.get('appwrite-session')
-    
-    if(!sessionCookie) return {isAuthenticated: false};
-    
-    try {
-      const { account } = await createSessionClient(sessionCookie.value)
-      const user = await account.get();
-      return {
-          isAuthenticated: true,
-          user: {
-              id: user.$id,
-              name: user.name,
-              email: user.email,
-          }
-      }
-    } catch (e) {
-        console.log('Error checking auth: ', e)
-        return {isAuthenticated: false};
+async function checkAuth(): Promise<{
+  isAuthenticated: boolean;
+  userId?: string;
+}> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("bookit-session")?.value;
+
+  if (!token) return { isAuthenticated: false };
+
+  try {
+    // JWT verification using jose. This works for next.js since The edge runtime does not support Node.js 'crypto' module.
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    const { payload } = await jwtVerify(token, secret);
+
+    // Ensure decoded is an object and has userId
+    const userId =
+      typeof payload === "object" && payload.userId
+        ? (payload as any).userId
+        : null;
+    if (!userId) {
+      return { isAuthenticated: false };
     }
-}
 
+    return {
+      isAuthenticated: true,
+      userId
+    };
+  } catch (e) {
+    console.log("Error checking auth: ", e);
+    return { isAuthenticated: false };
+  }
+}
 
 export default checkAuth;

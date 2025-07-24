@@ -1,34 +1,28 @@
-'use server';
+"use server";
 
-import { createSessionClient } from "@/lib/server/appwrite";
 import { cookies } from "next/headers";
 
-async function destroySession():Promise< { success?: boolean; error?: string }> {
-  
+async function destroySession(): Promise<{
+  success?: boolean;
+  error?: string;
+}> {
   // retrieve the session cookie
   const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get('appwrite-session')
-  
-  if(!sessionCookie) {
-    return { error: 'No session found.' }
+  const sessionCookie = cookieStore.get("bookit-session");
+
+  if (!sessionCookie) {
+    return { error: "No session found.", success: false };
   }
-  
+
   try {
-  
-    const { account } = await createSessionClient(sessionCookie.value)
-    
-    // delete session
-    await account.deleteSession('current')
-    
     // clear session cookie
-    cookieStore.delete('appwrite-session')
-    
-    return { success: true }
+    cookieStore.delete("bookit-session");
+
+    return { success: true, error: "" };
   } catch (e) {
-    console.log('Error deleting session: ', e)
-    return { error: 'Error deleting session.' }
+    console.log("Error deleting session: ", e);
+    return { error: "Error deleting session.", success: false };
   }
-  
 }
 
 export default destroySession;

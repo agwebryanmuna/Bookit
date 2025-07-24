@@ -1,4 +1,4 @@
-import { Room } from "@/utils/definitions";
+import { RoomType } from "@/utils/definitions";
 import RoomCard from "@/component/RoomCard";
 import Heading from "@/component/Heading";
 import { getAllRooms } from "@/app/actions/getAllRooms";
@@ -6,7 +6,7 @@ import { getAllRooms } from "@/app/actions/getAllRooms";
 
 export default async function Home() {
   
-  const rooms:Room[] = await getAllRooms()
+  const rooms:RoomType[] = await getAllRooms()
   
   return (
    <>

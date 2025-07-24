@@ -1,18 +1,19 @@
 "use server";
 
-import connectDb from "@/lib/mongoose";
-import Room from "@/models/Room.model";
-import { RoomType } from "@/utils/definitions";
 import { redirect } from "next/navigation";
+import getUser from "./getUser";
+import Room from "@/models/Room.model";
 
-export async function getAllRooms(): Promise<RoomType[]> {
-  await connectDb();
-
+async function getMyRooms() {
   try {
-    // fetch rooms
-    const rooms = await Room.find({});
+    // Get user's ID
+    const { user} = await getUser()
+    if(!user) redirect('/login')
 
-    return rooms.reverse().map((room) => {
+    // Fetch users rooms
+    const  myRooms  = await Room.find({userId: user._id})
+
+    return myRooms.map((room) => {
       return {
         _id: room._id,
         userId: room.userId,
@@ -28,9 +29,11 @@ export async function getAllRooms(): Promise<RoomType[]> {
         image: room.image,
       };
     });
-  } catch (e) {
-    console.log("Failed to get rooms", e);
+  } catch (error) {
+    console.log("Failed to get user rooms", error);
     return [];
-    // redirect('/error')
+    // redirect('/error');
   }
 }
+
+export default getMyRooms;

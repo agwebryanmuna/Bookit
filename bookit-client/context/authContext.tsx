@@ -1,4 +1,4 @@
-import checkAuth from "@/app/actions/checkAuth";
+import getUser from "@/app/actions/getUser";
 import {
   createContext,
   ReactNode,
@@ -10,7 +10,7 @@ import {
 const AuthContext = createContext<Record<string, any> | null>(null);
 
 interface CurrentUser {
-  id: string;
+  _id: string;
   name: string;
   email: string;
 }
@@ -21,7 +21,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const checkAuthentication = async () => {
-      const { isAuthenticated, user } = await checkAuth();
+      const { isAuthenticated, user } = await getUser();
       setIsAuthenticated(isAuthenticated);
       if (user) {
         setCurrentUser(user);

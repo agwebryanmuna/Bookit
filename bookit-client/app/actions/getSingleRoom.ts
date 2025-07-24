@@ -1,22 +1,19 @@
 "use server";
 
-import { createAdminClient } from "@/lib/server/appwrite";
+import connectDb from "@/lib/mongoose";
+import Room from "@/models/Room.model";
 import { redirect } from "next/navigation";
 
 export async function getSingleRoom(id: string) {
-  try {
-    const { databases } = await createAdminClient();
+  await connectDb();
 
+  try {
     // fetch rooms
-    const room = await databases.getDocument(
-      process.env.NEXT_PUBLIC_APPWRITE_DATABASE!,
-      process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_ROOMS!,
-      id
-    );
+    const room = await Room.findById(id);
 
     return {
-      $id: room.$id,
-      user_id: room.user_id,
+      _id: room._id,
+      userId: room.userId,
       name: room.name,
       description: room.description,
       sqft: room.sqft,

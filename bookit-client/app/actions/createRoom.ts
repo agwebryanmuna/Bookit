@@ -1,17 +1,23 @@
 "use server";
 
-import { createAdminClient } from "@/lib/server/appwrite";
 import checkAuth from "./checkAuth";
-import { ID } from "node-appwrite";
 import { revalidatePath } from "next/cache";
 import { SessionResponse } from "@/utils/definitions";
+import User from "@/models/User.model";
+import Room from "@/models/Room.model";
+import { handleUpload } from "@/lib/cloudinary";
+import connectDb from "@/lib/mongoose";
+
+const bucketId = process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ROOMS;
 
 async function createRoom(state: SessionResponse, formData: FormData) {
-  // Get databases instance
-  const { databases, storage } = await createAdminClient();
+  
+  await connectDb()
 
   try {
-    const { user } = await checkAuth();
+    const { userId } = await checkAuth();
+
+    const user = await User.findById(userId);
 
     if (!user) {
       return {
@@ -21,49 +27,29 @@ async function createRoom(state: SessionResponse, formData: FormData) {
     }
 
     // Uploading image
-    let imageID;
-
     const image = formData.get("image") as File;
+    let uploadedImage;
 
     if (image && image.size > 0 && image.name !== "undefined") {
-      try {
-        // Upload
-        const response = await storage.createFile(
-          process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ROOMS!,
-          ID.unique(),
-          image
-        );
-        imageID = response.$id;
-      } catch (error) {
-        console.log("Error uploading image", error);
-        return {
-          error: "Error uploading image",
-          success: false,
-        };
-      }
+      uploadedImage = await handleUpload(image) as Record<string, any>;
     } else {
       console.log("No image file provided or file is invalid");
     }
 
     // Create room
-    const newRoom = await databases.createDocument(
-      process.env.NEXT_PUBLIC_APPWRITE_DATABASE!,
-      process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_ROOMS!,
-      ID.unique(),
-      {
-        user_id: user.id,
-        name: formData.get("name"),
-        description: formData.get("description"),
-        sqft: formData.get("sqft"),
-        capacity: formData.get("capacity"),
-        location: formData.get("location"),
-        address: formData.get("address"),
-        availability: formData.get("availability"),
-        price_per_hour: formData.get("price_per_hour"),
-        amenities: formData.get("amenities"),
-        image: imageID,
-      }
-    );
+    await Room.create({
+      userId: user._id,
+      name: formData.get("name"),
+      description: formData.get("description"),
+      sqft: formData.get("sqft"),
+      capacity: formData.get("capacity"),
+      location: formData.get("location"),
+      address: formData.get("address"),
+      availability: formData.get("availability"),
+      price_per_hour: formData.get("price_per_hour"),
+      amenities: formData.get("amenities"),
+      image:  uploadedImage?.url || "",
+    });
 
     revalidatePath("/", "layout");
 
@@ -73,8 +59,7 @@ async function createRoom(state: SessionResponse, formData: FormData) {
     };
   } catch (error: any) {
     console.log(error);
-    const errorMessage =
-      error.response.message || "An unexpected error has occured";
+    const errorMessage = "An unexpected error has occured";
     return {
       error: errorMessage,
       success: false,

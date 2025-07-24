@@ -1,8 +1,11 @@
 "use server";
 
-import { createAdminClient } from "@/lib/server/appwrite";
+import connectDb from "@/lib/mongoose";
+import jwt from "jsonwebtoken";
 import { SessionResponse } from "@/utils/definitions";
 import { cookies } from "next/headers";
+import bcrypt from "bcrypt";
+import User from "@/models/User.model";
 
 async function createSession(state: SessionResponse, formData: FormData) {
   const password = formData.get("password") as string;
@@ -15,22 +18,33 @@ async function createSession(state: SessionResponse, formData: FormData) {
     };
   }
 
-  // Get an account instance
-  const { account } = await createAdminClient();
+  await connectDb();
 
   try {
-    // Generate a session
-    const session = await account.createEmailPasswordSession(email, password);
+    const user = await User.findOne({ email });
+    if (!user) {
+      return { error: "No user with this email found.", success: false };
+    }
 
-    // create cookie
-    const cookieStore = await cookies();
-    cookieStore.set("appwrite-session", session.secret, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      expires: new Date(session.expire),
-      path: "/",
+    // Check password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return { error: "Password incorrect", success: false };
+    }
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, {
+      expiresIn: "3d",
     });
+
+    // Create cookie
+    const cookieStore = await cookies()
+    cookieStore.set("bookit-session", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days
+        path: "/",
+      });
 
     return { success: true, error: "" };
   } catch (e) {

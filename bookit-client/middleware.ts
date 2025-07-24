@@ -1,21 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import checkAuth from "./app/actions/checkAuth";
 
+const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-  const { isAuthenticated } = await checkAuth();
+  const { isAuthenticated, userId } = await checkAuth();
+  const isPublicPath = ["/login", "/register"].includes(pathname);
 
-  if (pathname === '/bookings' && !isAuthenticated) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  if (isPublicPath && isAuthenticated) {
+    return NextResponse.redirect(new URL("/bookings", request.url));
   }
 
-  if((pathname === '/login' || pathname === '/register') && isAuthenticated) {
-    return NextResponse.redirect(new URL("/bookings", request.url));
+  if (!isAuthenticated || !userId) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/bookings", "/login", "/register", "/rooms/add", "/rooms/my-rooms"],
+  matcher: ["/bookings", "/rooms/add", "/rooms/my-rooms"],
 };
