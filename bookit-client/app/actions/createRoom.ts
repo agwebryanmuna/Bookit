@@ -52,6 +52,7 @@ async function createRoom(state: SessionResponse, formData: FormData) {
     });
 
     revalidatePath("/", "layout");
+    revalidatePath('/my-rooms', 'layout')
 
     return {
       success: true,

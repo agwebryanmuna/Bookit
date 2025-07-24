@@ -13,7 +13,7 @@ async function getMyRooms() {
     // Fetch users rooms
     const  myRooms  = await Room.find({userId: user._id})
 
-    return myRooms.map((room) => {
+    return myRooms.reverse().map((room) => {
       return {
         _id: room._id,
         userId: room.userId,

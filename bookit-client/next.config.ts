@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: "res.cloudinary.com",
         pathname: "/dx4rloqv5/**",
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/dx4rloqv5/**",
+      },
     ],
   },
 };

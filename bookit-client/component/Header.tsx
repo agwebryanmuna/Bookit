@@ -135,7 +135,7 @@ const Header = () => {
                 Bookings
               </Link>
               <Link
-                href="/add-room"
+                href="/rooms/add"
                 className="block rounded-md px-3 py-2 text-base font-medium text-gray-800 hover:bg-gray-700 transition-all ease-in-out duration-200 hover:text-white"
               >
                 Add Room

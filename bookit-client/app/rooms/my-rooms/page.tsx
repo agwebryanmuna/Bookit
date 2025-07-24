@@ -1,5 +1,6 @@
 import getMyRooms from "@/app/actions/getMyRooms";
 import Heading from "@/component/Heading";
+import MyRoomCard from "@/component/MyRoomCard";
 import { RoomType } from "@/utils/definitions";
 import React from "react";
 
@@ -10,7 +11,7 @@ const MyRoomsPage = async () => {
     <>
       <Heading title="My Rooms" />
       {rooms.length > 0 ? (
-        rooms.map((room, index) => <h3 key={index}>{room.name}</h3>)
+        rooms.map((room, index) => <MyRoomCard room={room} key={index} />)
       ) : (
         <p>No rooms found</p>
       )}
