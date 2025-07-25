@@ -63,7 +63,7 @@ const RoomPage = async ({ params }: { params: Promise<{ id: string }> }) => {
           </div>
         </div>
 
-        <BookingForm />
+        <BookingForm room={room} />
       </div>
     </>
   );

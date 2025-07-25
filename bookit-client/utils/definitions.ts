@@ -13,6 +13,14 @@ export interface RoomType {
   image: string;
 }
 
+export interface BookingType {
+  _id:string;
+  checkIn: string,
+    checkOut: string,
+    userId: string;
+    roomId: string;
+}
+
 export interface SessionResponse {
   success: boolean;
   error: string;
