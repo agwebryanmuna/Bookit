@@ -9,8 +9,6 @@ import connectDb from "@/lib/mongoose";
 
 async function bookRoom(previousState: SessionResponse, formData: FormData) {
 
-  await connectDb()
-
   try {
     // Get user's ID
     const { user } = await getUser();
@@ -27,7 +25,7 @@ async function bookRoom(previousState: SessionResponse, formData: FormData) {
     const checkInDateTime = `${checkInDate}T${checkInTime}`;
     const checkOutDateTime = `${checkOutDate}T${checkOutTime}`;
 
-    const bookingData: Omit<BookingType, "_id"> = {
+    const bookingData: Omit<BookingType, "_id" | "room"> = {
       checkIn: checkInDateTime,
       checkOut: checkOutDateTime,
       userId: user._id,

@@ -11,8 +11,6 @@ import connectDb from "@/lib/mongoose";
 const bucketId = process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ROOMS;
 
 async function createRoom(state: SessionResponse, formData: FormData) {
-  
-  await connectDb()
 
   try {
     const { userId } = await checkAuth();

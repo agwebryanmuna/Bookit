@@ -14,11 +14,12 @@ export interface RoomType {
 }
 
 export interface BookingType {
-  _id:string;
-  checkIn: string,
-    checkOut: string,
-    userId: string;
-    roomId: string;
+  _id: string;
+  checkIn: string;
+  checkOut: string;
+  userId: string;
+  room: RoomType;
+  roomId:string;
 }
 
 export interface SessionResponse {

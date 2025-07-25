@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import getUser from "./getUser";
 import Room from "@/models/Room.model";
+import Booking from "@/models/Booking.model";
 
 async function deleteRoom(roomId: string) {
   const { user } = await getUser();
@@ -12,8 +13,11 @@ async function deleteRoom(roomId: string) {
   }
 
   try {
-    const deleteRoom = await Room.findOneAndDelete({ _id: roomId });
-    console.log(deleteRoom);
+    // Delete the room
+    await Room.findOneAndDelete({ _id: roomId });
+
+    // Delete all booking for this room
+    await Booking.deleteMany({ roomId });
 
     // Revalidate my rooms and all rooms
     revalidatePath("/rooms/my-rooms", "layout");

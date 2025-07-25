@@ -1,17 +1,16 @@
-'use client'
+"use client";
 
-import bookRoom from '@/app/actions/bookRoom';
-import useAuth from '@/context/authContext';
-import { RoomType } from '@/utils/definitions'
-import { useRouter } from 'next/navigation';
-import React, { useActionState, useEffect } from 'react'
-import { toast } from 'react-toastify';
+import bookRoom from "@/app/actions/bookRoom";
+import useAuth from "@/context/authContext";
+import { RoomType } from "@/utils/definitions";
+import { useRouter } from "next/navigation";
+import React, { useActionState, useEffect } from "react";
+import { toast } from "react-toastify";
 
-const initialFormState = {error: '', success: false}
+const initialFormState = { error: "", success: false };
 
-const BookingForm = ({room}:{room:RoomType}) => {
-
-const [state, formAction, isPending] = useActionState(
+const BookingForm = ({ roomId }: { roomId: string }) => {
+  const [state, formAction, isPending] = useActionState(
     bookRoom,
     initialFormState
   );
@@ -31,7 +30,7 @@ const [state, formAction, isPending] = useActionState(
     <div className="mt-6">
       <h2 className="text-xl font-bold">Book this Room</h2>
       <form action={formAction} className="mt-4">
-        <input type="hidden" name='room_id' value={room._id} />
+        <input type="hidden" name="room_id" value={roomId} />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <label
@@ -94,7 +93,7 @@ const [state, formAction, isPending] = useActionState(
             />
           </div>
         </div>
-        
+
         <div className="mt-6">
           <button
             type="submit"
@@ -105,6 +104,6 @@ const [state, formAction, isPending] = useActionState(
         </div>
       </form>
     </div>
-  )
-}
-export default BookingForm
+  );
+};
+export default BookingForm;
