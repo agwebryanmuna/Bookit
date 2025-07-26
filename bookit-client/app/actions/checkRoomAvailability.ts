@@ -1,7 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
-import getUser from "./getUser";
 import Booking from "@/models/Booking.model";
 import { DateTime } from "luxon";
 
