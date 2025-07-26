@@ -6,9 +6,6 @@ import { SessionResponse } from "@/utils/definitions";
 import User from "@/models/User.model";
 import Room from "@/models/Room.model";
 import { handleUpload } from "@/lib/cloudinary";
-import connectDb from "@/lib/mongoose";
-
-const bucketId = process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ROOMS;
 
 async function createRoom(state: SessionResponse, formData: FormData) {
 
