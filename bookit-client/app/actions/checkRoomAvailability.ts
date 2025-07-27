@@ -3,19 +3,6 @@
 import Booking from "@/models/Booking.model";
 import { DateTime } from "luxon";
 
-function toUTCDateTime(dateString: string) {
-  return DateTime.fromISO(dateString, { zone: "utc" }).toUTC();
-}
-
-function dateRangeOverlap(
-  checkInA: any,
-  checkOutA: any,
-  checkInB: any,
-  checkOutB: any
-) {
-  return checkInA < checkOutB && checkOutA > checkInB;
-}
-
 async function checkRoomAvailability(
   roomId: string,
   checkIn: string,
