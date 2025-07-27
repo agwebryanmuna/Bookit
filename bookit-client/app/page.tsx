@@ -7,7 +7,7 @@ import { RoomsLoadingSkeleton } from "@/component/Skeletons";
 
 export default async function Home() {
   const rooms: RoomType[] = await getAllRooms();
-
+  
   return (
     <>
       <Heading title={"Available Rooms"} />

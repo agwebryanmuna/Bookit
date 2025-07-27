@@ -13,7 +13,7 @@ async function getMyBookings() {
 
     const bookings = await Booking.find({ userId: user._id });
   
-    const  myBookings = await Promise.all(bookings.reverse().map(async (booking) => {
+    return await Promise.all(bookings.reverse().map(async (booking) => {
       const room = await Room.findById(booking.roomId)
       return {
         _id: booking._id,
@@ -24,11 +24,8 @@ async function getMyBookings() {
         roomId: booking.roomId,
       };
     }));
-
-    return myBookings;
-  } catch (error) {
-    console.log("Failed to get user bookings", error);
-    return [];
+  } catch (_) {
+    throw new Error("Failed to get your bookings!");
   }
 }
 

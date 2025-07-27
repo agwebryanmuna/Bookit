@@ -5,8 +5,7 @@ import Header from "@/component/Header";
 import Footer from "@/component/Footer";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider } from "@/providers/AuthProvider";
-import { Suspense } from "react";
-import { RoomsLoadingSkeleton } from "@/component/Skeletons";
+import React from "react";
 
 const inter = Inter({
   variable: "--font-inter",

@@ -10,19 +10,19 @@ cloudinary.config({
 });
 
 export default cloudinary;
-
-function uploadBufferToCloudinary(buffer: Buffer, folder: string) {
-  return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      { folder },
-      (error, result) => {
-        if (result) resolve(result);
-        else reject(error);
-      }
-    );
-    streamifier.createReadStream(buffer).pipe(uploadStream);
-  });
-}
+//
+// function uploadBufferToCloudinary(buffer: Buffer, folder: string) {
+//   return new Promise((resolve, reject) => {
+//     const uploadStream = cloudinary.uploader.upload_stream(
+//       { folder },
+//       (error, result) => {
+//         if (result) resolve(result);
+//         else reject(error);
+//       }
+//     );
+//     streamifier.createReadStream(buffer).pipe(uploadStream);
+//   });
+// }
 
 export async function handleUpload(image: File) {
   if (!image) throw new Error("No image provided");
@@ -30,7 +30,7 @@ export async function handleUpload(image: File) {
   const arrayBuffer = await image.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  const result = await new Promise((resolve, reject) => {
+  return await new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       { folder: "bookit-rooms" },
       (error, result) => {
@@ -40,6 +40,4 @@ export async function handleUpload(image: File) {
     );
     streamifier.createReadStream(buffer).pipe(uploadStream);
   });
-
-  return result;
 }

@@ -47,8 +47,7 @@ async function createSession(state: SessionResponse, formData: FormData) {
       });
 
     return { success: true, error: "" };
-  } catch (e) {
-    console.log("Authentication error", e);
+  } catch (_) {
     return { error: "Invalid email or password.", success: false };
   }
 }

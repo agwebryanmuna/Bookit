@@ -3,7 +3,6 @@
 import connectDb from "@/lib/mongoose";
 import Room from "@/models/Room.model";
 import { RoomType } from "@/utils/definitions";
-import { redirect } from "next/navigation";
 
 export async function getAllRooms(): Promise<RoomType[]> {
   await connectDb();
@@ -28,9 +27,7 @@ export async function getAllRooms(): Promise<RoomType[]> {
         image: room.image,
       };
     });
-  } catch (e) {
-    console.log("Failed to get rooms", e);
-    return [];
-    // redirect('/error')
+  } catch (_) {
+    throw new Error("Failed to get rooms!");
   }
 }

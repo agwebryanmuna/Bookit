@@ -2,7 +2,6 @@
 
 import connectDb from "@/lib/mongoose";
 import Room from "@/models/Room.model";
-import { redirect } from "next/navigation";
 
 export async function getSingleRoom(id: string) {
   await connectDb();
@@ -10,7 +9,7 @@ export async function getSingleRoom(id: string) {
   try {
     // fetch rooms
     const room = await Room.findById(id);
-
+    if(!room) return null
     return {
       _id: room._id,
       userId: room.userId,
@@ -25,8 +24,7 @@ export async function getSingleRoom(id: string) {
       availability: room.availability,
       image: room.image,
     };
-  } catch (e) {
-    console.log("Failed to get room", e);
-    // redirect('/error')
+  } catch (_) {
+    return null
   }
 }

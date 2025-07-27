@@ -1,9 +1,7 @@
 "use server";
 
-import User from "@/models/User.model";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
 
 async function checkAuth(): Promise<{
   isAuthenticated: boolean;
@@ -18,12 +16,9 @@ async function checkAuth(): Promise<{
     // JWT verification using jose. This works for next.js since The edge runtime does not support Node.js 'crypto' module.
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
     const { payload } = await jwtVerify(token, secret);
-
-    // Ensure decoded is an object and has userId
-    const userId =
-      typeof payload === "object" && payload.userId
-        ? (payload as any).userId
-        : null;
+    
+    const userId =payload['userId'] as string;
+    
     if (!userId) {
       return { isAuthenticated: false };
     }
@@ -33,7 +28,6 @@ async function checkAuth(): Promise<{
       userId
     };
   } catch (e) {
-    console.log("Error checking auth: ", e);
     return { isAuthenticated: false };
   }
 }

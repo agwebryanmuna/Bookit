@@ -26,9 +26,7 @@ async function createRoom(state: SessionResponse, formData: FormData) {
     let uploadedImage;
 
     if (image && image.size > 0 && image.name !== "undefined") {
-      uploadedImage = await handleUpload(image) as Record<string, any>;
-    } else {
-      console.log("No image file provided or file is invalid");
+      uploadedImage = await handleUpload(image) as Record<string, string>;
     }
 
     // Create room
@@ -53,11 +51,9 @@ async function createRoom(state: SessionResponse, formData: FormData) {
       success: true,
       error: "",
     };
-  } catch (error: any) {
-    console.log(error);
-    const errorMessage = "An unexpected error has occured";
+  } catch (_) {
     return {
-      error: errorMessage,
+      error: "Could not create room. Please try again.",
       success: false,
     };
   }

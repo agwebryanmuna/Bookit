@@ -5,11 +5,12 @@ import Image from "next/image";
 import { FaChevronLeft } from "react-icons/fa";
 import BookingForm from "@/component/BookingForm";
 import { getSingleRoom } from "@/app/actions/getSingleRoom";
+import { RoomType } from "@/utils/definitions";
 
 const RoomPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
 
-  const room = await getSingleRoom(id);
+  const room:RoomType | null = await getSingleRoom(id);
 
   if (!room) return <Heading title={"Room Not Found"} />;
 

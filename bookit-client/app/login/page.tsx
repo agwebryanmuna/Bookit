@@ -19,7 +19,7 @@ const LoginPage = () => {
   );
   const router = useRouter();
 
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const { setIsAuthenticated } = useAuth();
 
   useEffect(() => {
     if (state?.error) {
@@ -30,7 +30,7 @@ const LoginPage = () => {
       setIsAuthenticated(true);
       router.push("/");
     }
-  }, [state]);
+  }, [state, setIsAuthenticated, router]);
 
   return (
     <div className="flex items-center justify-center">

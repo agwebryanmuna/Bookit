@@ -29,10 +29,8 @@ async function getMyRooms() {
         image: room.image,
       };
     });
-  } catch (error) {
-    console.log("Failed to get user rooms", error);
-    return [];
-    // redirect('/error');
+  } catch (_) {
+    throw new Error("Failed to get your rooms!");
   }
 }
 

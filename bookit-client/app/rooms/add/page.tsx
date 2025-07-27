@@ -27,7 +27,7 @@ const AddRoomPage = () => {
       toast.success("Room created successfully!");
       router.push("/");
     }
-  }, [state]);
+  }, [router, state]);
 
   return (
     <>
