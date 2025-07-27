@@ -6,7 +6,7 @@ A modern, full-stack web application for discovering, booking, and managing your
 
 ## 🚀 Live Demo
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20Site-brightgreen?style=for-the-badge)](https://github.com/agwebryanmuna/Bookit.git)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20Site-brightgreen?style=for-the-badge)](https://bookit-renx.vercel.app/)
 
 ---
 
