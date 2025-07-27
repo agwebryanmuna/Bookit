@@ -51,7 +51,8 @@ async function createRoom(state: SessionResponse, formData: FormData) {
       success: true,
       error: "",
     };
-  } catch (_) {
+  } catch (e) {
+    console.log(e)
     return {
       error: "Could not create room. Please try again.",
       success: false,

@@ -5,6 +5,10 @@ import { MyRoomsLoadingSkeleton } from "@/component/Skeletons";
 import { RoomType } from "@/utils/definitions";
 import React, { Suspense } from "react";
 
+
+export const dynamic = "force-dynamic";
+
+
 const MyRoomsPage = async () => {
   const rooms: RoomType[] = await getMyRooms(); // Assuming you have a function to fetch user's rooms
 

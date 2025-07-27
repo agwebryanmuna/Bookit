@@ -28,6 +28,7 @@ async function checkAuth(): Promise<{
       userId
     };
   } catch (e) {
+    console.log(e)
     return { isAuthenticated: false };
   }
 }

@@ -26,7 +26,7 @@ async function checkRoomAvailability(
 
     // If there's an overlapping booking, return false
     return !existingBooking;
-  } catch (error: any) {
+  } catch (error) {
     console.log("Failed to check availabiliity: ", error);
     return false;
   }

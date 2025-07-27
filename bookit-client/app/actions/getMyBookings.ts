@@ -24,7 +24,8 @@ async function getMyBookings() {
         roomId: booking.roomId,
       };
     }));
-  } catch (_) {
+  } catch (e) {
+    console.log(e)
     throw new Error("Failed to get your bookings!");
   }
 }

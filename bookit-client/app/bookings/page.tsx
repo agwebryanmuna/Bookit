@@ -6,6 +6,10 @@ import Link from "next/link";
 import Heading from "@/component/Heading";
 import { BookingsLoadingSkeleton } from "@/component/Skeletons";
 
+
+export const dynamic = "force-dynamic";
+
+
 const BookingsPage = async () => {
   const bookings: BookingType[] = await getMyBookings();
 

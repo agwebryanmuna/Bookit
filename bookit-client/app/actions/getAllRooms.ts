@@ -27,7 +27,8 @@ export async function getAllRooms(): Promise<RoomType[]> {
         image: room.image,
       };
     });
-  } catch (_) {
+  } catch (e) {
+    console.log(e)
     throw new Error("Failed to get rooms!");
   }
 }
